@@ -1,0 +1,17 @@
+.movieCard {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 40vh;
+    overflow: hidden;
+}
+
+.poster {
+    width: 100%;
+    height: auto;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}

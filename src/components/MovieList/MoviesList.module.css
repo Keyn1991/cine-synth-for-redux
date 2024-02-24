@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Щоб ліва і права колонки починалися з однакового рівня */
+}
+
+.leftColumn {
+    width: 15%;
+}
+
+.rightColumn {
+    width: 85%;
+}
+
+.moviesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Один стовпчик з мінімальною шириною 200px */
+    gap: 20px; /* Проміжок між блоками */
+}
+
+
+
+.movieBlock {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 20px; /* Відступ між блоками фільмів */
+}
+
+/* Адаптивні параметри */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Перемикання на вертикальне розташування на малих екранах */
+    }
+
+    .leftColumn {
+        width: 100%; /* Ширина стовпця на малих екранах */
+    }
+
+    .rightColumn {
+        width: 100%; /* Ширина стовпця на малих екранах */
+    }
+}
