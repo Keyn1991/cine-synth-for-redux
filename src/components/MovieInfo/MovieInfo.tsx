@@ -1,15 +1,20 @@
-import {FC, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import React, {FC, useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import {IMovie} from "../../interface/interfaceMovie";
 import {movieService} from "../../services";
 import {posterURL} from "../../configs";
 import {MovieTrailers} from "../MovieTrailers/MovieTrailers";
+import {Button} from "react-bootstrap";
 
 const MovieInfo: FC = () => {
     const { id } = useParams<{ id: string }>();
     const [movie, setMovie] = useState<IMovie | null>(null);
     const [videos, setVideos] = useState<{ key: string; name: string; }[]>([]);
 
+    const navigate = useNavigate();
+    const handleBackClick = () => {
+        navigate('/');
+    };
     useEffect(() => {
         movieService.getOneMovie(id)
             .then(response => {
@@ -33,6 +38,7 @@ const MovieInfo: FC = () => {
 
     return (
         <div>
+            <Button onClick={handleBackClick}>Back</Button>
             <h1>{movie.title}</h1>
             <p>{movie.overview}</p>
             <img src={`${posterURL}${movie.poster_path}`} alt={movie.title} />

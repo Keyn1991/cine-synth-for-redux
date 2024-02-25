@@ -6,5 +6,7 @@ export interface IMovie {
     genres: string[];
     genre_ids: string;
     name: string;
+    with_genres: any
+    genreId: string
 
 }

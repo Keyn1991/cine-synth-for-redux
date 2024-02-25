@@ -18,7 +18,7 @@ const MoviesListCard: FC<MoviesListCardProps> = ({ movie, genres }) => {
     const genreNames: string[] = movieGenres.map(genre => genre.name);
 
     return (
-        <div className={styles.movieCard}> {/* Використовуємо стилі з модуля */}
+        <div className={styles.movieCard}>
             <Link to={`/movie/${id}`}>
                 <GenreBadge genres={genreNames}/>
                 <img src={`https://image.tmdb.org/t/p/w500${poster_path}`} alt={title} className={styles.poster}/>

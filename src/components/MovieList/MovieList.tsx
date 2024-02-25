@@ -1,26 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { genreService, movieService } from '../../services';
-import { MoviesListCard } from '../MoviesListCard/MoviesListCard';
-import { CustomPagination } from '../CustomPagination/CustomPagination';
+import React, {useEffect, useState} from 'react';
+import {useSearchParams} from 'react-router-dom';
+import {genreService, movieService} from '../../services';
+import {MoviesListCard} from '../MoviesListCard/MoviesListCard';
+import {CustomPagination} from '../CustomPagination/CustomPagination';
 import styles from "./MoviesList.module.css";
+import {Search} from "../Search/Search";
+import {GenreList} from "../Ganre/GenreList";
+
 
 const MoviesList = () => {
-    const { id: genreId } = useParams();
     const [movies, setMovies] = useState([]);
+    const [filteredMovies, setFilteredMovies] = useState([]);
     const [genres, setGenres] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
-    const [query, setQuery] = useSearchParams({ with_genres: `${genreId}`, page: '1' });
+    const [query, setQuery] = useSearchParams({ page: '1' });
     const page = query.get('page');
-    const [currentPage, setCurrentPage] = useState(1)
-    const with_genres = query.get('with_genres');
+    const [currentPage, setCurrentPage] = useState(1);
 
     const fetchMovies = async () => {
         setLoading(true);
         try {
-            const response = await movieService.getAllMovies(parseInt(page));
+            const response = await movieService.getGenreID(query.get('with_genres'), page ? parseInt(page) : 1);
             setMovies(response.data.results);
+            setFilteredMovies(response.data.results);
             setTotalPages(response.data.total_pages);
         } catch (error) {
             console.error('Error fetching movies:', error);
@@ -38,17 +41,36 @@ const MoviesList = () => {
         }
     };
 
+    const handleSearch = async (searchTerm: string) => {
+        try {
+            const response = await movieService.movieSearch(searchTerm);
+            setFilteredMovies(response.data.results);
+        } catch (error) {
+            console.error('Error searching movies:', error);
+        }
+    };
+
     useEffect(() => {
         fetchMovies();
         fetchGenres();
     }, [query]);
 
     const nextPage = () => {
-        setQuery(value => ({ page: String(+value.get('page') + 1) }));
+        setQuery(value => {
+            fetchMovies(); // Оновити фільми при зміні сторінки
+            return { ...value, page: String(+value.get('page') + 1) };
+        });
     };
 
     const prevPage = () => {
-        setQuery(value => ({ page: String(+value.get('page') - 1) }));
+        setQuery(value => {
+            fetchMovies(); // Оновити фільми при зміні сторінки
+            return { ...value, page: String(+value.get('page') - 1) };
+        });
+    };
+
+    const handleGenreClick = (genreId: string) => {
+        setQuery({ with_genres: genreId, page: '1' });
     };
 
     return (
@@ -56,15 +78,12 @@ const MoviesList = () => {
             {loading && <h1>Loading.........</h1>}
             <div className={styles.leftColumn}>
                 <h2>Genres:</h2>
-                <ul>
-                    {genres.map(genre => (
-                        <li key={genre.id}>{genre.name}</li>
-                    ))}
-                </ul>
+                <GenreList onGenreClick={handleGenreClick}/>
             </div>
             <div className={styles.rightColumn}>
+                <Search onSearch={handleSearch}/>
                 <div className={styles.moviesGrid}>
-                    {movies.map(movie => (
+                    {filteredMovies.map(movie => (
                         <div key={movie.id} className={styles.movieBlock}>
                             <MoviesListCard movie={movie} genres={genres}/>
                         </div>
