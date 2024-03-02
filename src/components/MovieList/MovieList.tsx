@@ -8,12 +8,13 @@ import styles from "./MoviesList.module.css";
 import {Search} from "../Search";
 import {GenreList} from "../Ganre";
 import {CustomLoader} from "../CustomLoader";
+import {IMovie} from "../../interface";
 
 
 const MoviesList = () => {
-    const [movies, setMovies] = useState([]);
-    const [filteredMovies, setFilteredMovies] = useState([]);
-    const [genres, setGenres] = useState([]);
+    const [movies, setMovies] = useState<IMovie[]>([]);
+    const [filteredMovies, setFilteredMovies] = useState<IMovie[]>([]);
+    const [genres, setGenres] = useState<IMovie[]>([]);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
     const [query, setQuery] = useSearchParams({page: '1'});
@@ -66,7 +67,7 @@ const MoviesList = () => {
 
     const prevPage = () => {
         setQuery(value => {
-            fetchMovies(); // Оновити фільми при зміні сторінки
+            fetchMovies();
             return {...value, page: String(+value.get('page') - 1)};
         });
     };
@@ -77,7 +78,7 @@ const MoviesList = () => {
 
     return (
         <div className={styles.container}>
-            {loading && <CustomLoader />}
+            {loading && <CustomLoader/>}
             <div className={styles.leftColumn}>
                 <h2>Genres:</h2>
                 <GenreList onGenreClick={handleGenreClick}/>
