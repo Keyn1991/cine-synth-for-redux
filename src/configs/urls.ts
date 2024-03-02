@@ -1,4 +1,4 @@
-import { IUrls } from '../interface/interfaceUrls';
+import { IUrls } from '../interface';
 
 const baseURL: string = "https://api.themoviedb.org/3";
 const posterURL: string = 'https://image.tmdb.org/t/p/w200';

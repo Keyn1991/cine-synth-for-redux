@@ -1,42 +1,43 @@
 .container {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Щоб ліва і права колонки починалися з однакового рівня */
+    align-items: flex-start;
 }
 
 .leftColumn {
-    width: 15%;
+    width: 10vw;
+
 }
 
 .rightColumn {
-    width: 85%;
+    flex-grow: 1;
+    text-align: center;
+
 }
 
 .moviesGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Один стовпчик з мінімальною шириною 200px */
-    gap: 20px; /* Проміжок між блоками */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 15px;
 }
-
-
 
 .movieBlock {
     width: 100%;
     height: 100%;
-    margin-bottom: 20px; /* Відступ між блоками фільмів */
+    margin-bottom: 20px;
 }
 
-/* Адаптивні параметри */
+
 @media (max-width: 768px) {
     .container {
-        flex-direction: column; /* Перемикання на вертикальне розташування на малих екранах */
+        flex-direction: column;
     }
 
     .leftColumn {
-        width: 100%; /* Ширина стовпця на малих екранах */
+        width: 100%;
     }
 
     .rightColumn {
-        width: 100%; /* Ширина стовпця на малих екранах */
+        width: 100%;
     }
 }

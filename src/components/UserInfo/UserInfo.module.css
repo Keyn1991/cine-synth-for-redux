@@ -1,0 +1,27 @@
+.User {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 20%;
+}
+
+.userIcon:hover {
+    background-color: #f8f8f8;
+    transform: scale(1.1);
+    transition: all 0.3s ease-in-out;
+}
+
+
+.userIcon {
+    border-radius: 10%;
+    border: 1px solid black;
+    width: 15%;
+    box-shadow: 10px 5px 5px black;
+    margin: 10px;
+
+
+}
+
+
+
+

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, {useState} from 'react';
+import {Button, Form} from 'react-bootstrap';
 
 interface SearchProps {
     onSearch: (searchTerm: string) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ onSearch }) => {
+const Search: React.FC<SearchProps> = ({onSearch}) => {
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleSearch = () => {
@@ -13,18 +13,22 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
     };
 
     return (
-        <div className="d-flex align-items-center">
+        <div
+            className="d-flex align-items-center justify-content-center">
             <Form.Control
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search"
-                style={{ width: '15%' }}
                 className="mr-2"
+                style={{
+                    maxWidth: '20vw',
+                    marginRight: '0.5rem'
+                }}
             />
-            <Button onClick={handleSearch}>Search</Button>
+            <Button onClick={handleSearch} className="ml-2">Search</Button>
         </div>
     );
 };
 
-export { Search };
+export {Search};

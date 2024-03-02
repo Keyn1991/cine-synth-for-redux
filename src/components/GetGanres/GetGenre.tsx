@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { movieService } from '../../services';
+import React, {useEffect, useState} from 'react';
 
+import {movieService} from '../../services';
+import styles from "./GetGenre.module.css"
 const GetGenre = () => {
     const [genres, setGenres] = useState([]);
 
@@ -15,12 +16,12 @@ const GetGenre = () => {
     }, []);
 
     return (
-        <ul>
+        <div className={styles.bgColor}>
             {genres && genres.map(genre => (
                 <li key={genre.id}>{genre.name}</li>
             ))}
-        </ul>
+        </div>
     );
 };
 
-export { GetGenre };
+export {GetGenre};

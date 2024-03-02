@@ -8,5 +8,6 @@ export interface IMovie {
     name: string;
     with_genres: any
     genreId: string
-
+    vote_average: number;
+    poster: string
 }

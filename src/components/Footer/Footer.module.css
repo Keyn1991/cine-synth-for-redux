@@ -1,0 +1,27 @@
+.Main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 135px;
+}
+
+.Footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 135px;
+}
+
+
+.Footer svg {
+    font-size: 2vw;
+    margin-right: 1vw;
+}
+
+.Footer a {
+    color: #FFDB4C;
+}
+
+.block {
+    margin: 5px;
+}

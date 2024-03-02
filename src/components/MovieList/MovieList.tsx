@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
+
 import {genreService, movieService} from '../../services';
-import {MoviesListCard} from '../MoviesListCard/MoviesListCard';
-import {CustomPagination} from '../CustomPagination/CustomPagination';
+import {MoviesListCard} from '../MoviesListCard';
+import {CustomPagination} from '../CustomPagination';
 import styles from "./MoviesList.module.css";
-import {Search} from "../Search/Search";
-import {GenreList} from "../Ganre/GenreList";
+import {Search} from "../Search";
+import {GenreList} from "../Ganre";
+import {CustomLoader} from "../CustomLoader";
 
 
 const MoviesList = () => {
@@ -14,7 +16,7 @@ const MoviesList = () => {
     const [genres, setGenres] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
-    const [query, setQuery] = useSearchParams({ page: '1' });
+    const [query, setQuery] = useSearchParams({page: '1'});
     const page = query.get('page');
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -57,25 +59,25 @@ const MoviesList = () => {
 
     const nextPage = () => {
         setQuery(value => {
-            fetchMovies(); // Оновити фільми при зміні сторінки
-            return { ...value, page: String(+value.get('page') + 1) };
+            fetchMovies();
+            return {...value, page: String(+value.get('page') + 1)};
         });
     };
 
     const prevPage = () => {
         setQuery(value => {
             fetchMovies(); // Оновити фільми при зміні сторінки
-            return { ...value, page: String(+value.get('page') - 1) };
+            return {...value, page: String(+value.get('page') - 1)};
         });
     };
 
     const handleGenreClick = (genreId: string) => {
-        setQuery({ with_genres: genreId, page: '1' });
+        setQuery({with_genres: genreId, page: '1'});
     };
 
     return (
         <div className={styles.container}>
-            {loading && <h1>Loading.........</h1>}
+            {loading && <CustomLoader />}
             <div className={styles.leftColumn}>
                 <h2>Genres:</h2>
                 <GenreList onGenreClick={handleGenreClick}/>
@@ -101,4 +103,4 @@ const MoviesList = () => {
     );
 };
 
-export { MoviesList };
+export {MoviesList};
