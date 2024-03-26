@@ -1,94 +1,65 @@
-import React, {useEffect, useState} from 'react';
-import {useSearchParams} from 'react-router-dom';
-
-import {genreService, movieService} from '../../services';
-import {MoviesListCard} from '../MoviesListCard';
-import {CustomPagination} from '../CustomPagination';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import { fetchMovies, setFilteredMovies } from '../../redux/slices/movieSlice';
+import { MoviesListCard } from '../MoviesListCard';
+import { Search } from "../Search";
+import { GenreList } from "../GenreList";
+import { RootState } from '../../redux';
+import { CustomLoader } from "../CustomLoader";
+import { CustomPagination } from "../CustomPagination";
 import styles from "./MoviesList.module.css";
-import {Search} from "../Search";
-import {GenreList} from "../Ganre";
-import {CustomLoader} from "../CustomLoader";
-import {IMovie} from "../../interface";
-
+import { movieService } from "../../services";
 
 const MoviesList = () => {
-    const [movies, setMovies] = useState<IMovie[]>([]);
-    const [filteredMovies, setFilteredMovies] = useState<IMovie[]>([]);
-    const [genres, setGenres] = useState<IMovie[]>([]);
-    const [totalPages, setTotalPages] = useState(1);
-    const [loading, setLoading] = useState(true);
-    const [query, setQuery] = useSearchParams({page: '1'});
+    const dispatch = useDispatch();
+    const { filteredMovies, loading, totalPages } = useSelector((state: RootState) => state.movies);
+    const { genres } = useSelector((state: RootState) => state.genres);
+    const [query, setQuery] = useSearchParams({ page: '1' });
     const page = query.get('page');
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage] = useState(1);
 
-    const fetchMovies = async () => {
-        setLoading(true);
-        try {
-            const response = await movieService.getGenreID(query.get('with_genres'), page ? parseInt(page) : 1);
-            setMovies(response.data.results);
-            setFilteredMovies(response.data.results);
-            setTotalPages(response.data.total_pages);
-        } catch (error) {
-            console.error('Error fetching movies:', error);
-        } finally {
-            setLoading(false);
-        }
+    useEffect(() => {
+        // @ts-ignore
+        dispatch(fetchMovies({ genreID: query.get('with_genres') || '', page: parseInt(page || '1') }));
+    }, [dispatch, query, page]);
+
+    const nextPage = () => {
+        const nextPageNumber = parseInt(page || '1') + 1;
+        setQuery({ ...query, page: nextPageNumber.toString() });
     };
 
-    const fetchGenres = async () => {
-        try {
-            const response = await genreService.getAllGenres();
-            setGenres(response.data.genres);
-        } catch (error) {
-            console.error('Error fetching genres:', error);
-        }
+    const prevPage = () => {
+        const prevPageNumber = Math.max(parseInt(page || '1') - 1, 1);
+        setQuery({ ...query, page: prevPageNumber.toString() });
+    };
+
+    const handleGenreClick = (genreId: string) => {
+        setQuery({ with_genres: genreId, page: '1' });
     };
 
     const handleSearch = async (searchTerm: string) => {
         try {
             const response = await movieService.movieSearch(searchTerm);
-            setFilteredMovies(response.data.results);
+            dispatch(setFilteredMovies(response.data.results));
         } catch (error) {
             console.error('Error searching movies:', error);
         }
     };
 
-    useEffect(() => {
-        fetchMovies();
-        fetchGenres();
-    }, [query]);
-
-    const nextPage = () => {
-        setQuery(value => {
-            fetchMovies();
-            return {...value, page: String(+value.get('page') + 1)};
-        });
-    };
-
-    const prevPage = () => {
-        setQuery(value => {
-            fetchMovies();
-            return {...value, page: String(+value.get('page') - 1)};
-        });
-    };
-
-    const handleGenreClick = (genreId: string) => {
-        setQuery({with_genres: genreId, page: '1'});
-    };
-
     return (
         <div className={styles.container}>
-            {loading && <CustomLoader/>}
+            {loading && <CustomLoader />}
             <div className={styles.leftColumn}>
                 <h2>Genres:</h2>
-                <GenreList onGenreClick={handleGenreClick}/>
+                <GenreList onGenreClick={handleGenreClick} genres={genres} />
             </div>
             <div className={styles.rightColumn}>
-                <Search onSearch={handleSearch}/>
+                <Search onSearch={handleSearch} />
                 <div className={styles.moviesGrid}>
-                    {filteredMovies.map(movie => (
+                    {filteredMovies.map((movie) => (
                         <div key={movie.id} className={styles.movieBlock}>
-                            <MoviesListCard movie={movie} genres={genres}/>
+                            <MoviesListCard movie={movie} genres={genres} />
                         </div>
                     ))}
                 </div>
@@ -104,4 +75,4 @@ const MoviesList = () => {
     );
 };
 
-export {MoviesList};
+export { MoviesList };

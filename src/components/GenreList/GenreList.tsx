@@ -3,9 +3,10 @@ import {ListGroup, Nav, Navbar} from 'react-bootstrap';
 
 import styles from "./GenreList.module.css"
 import {genreService} from '../../services';
-
+import { IMovie } from '../../interface';
 interface GenreListProps {
     onGenreClick: (genreId: string) => void;
+    genres: IMovie[]; // Замініть IMovie на тип вашого об'єкта жанру
 }
 
 const GenreList: FC<GenreListProps> = ({onGenreClick}) => {
